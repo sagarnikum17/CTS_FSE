@@ -1,0 +1,5 @@
+package com.digitalbook.reader.exception;
+
+public class ReaderException {
+
+}

@@ -1,0 +1,20 @@
+package com.digitalbook.reader.repositories;
+
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
+import com.digitalbook.reader.entities.ReaderBook;
+import com.digitalbook.reader.entities.ReaderSubscribe;
+
+public interface ReaderBookRepository extends JpaRepository<ReaderSubscribe, Integer>{
+	
+
+	@Query(nativeQuery = false, value = "select b from ReaderSubscribe b where b.readeremail=?1")
+	List<ReaderSubscribe> findAllPurchaseBook(String readeremail, ReaderBook readerbook);
+	
+	
+	@Query(nativeQuery = false, value = "select b from ReaderSubscribe b where b.readeremail=?1 AND b.rbookid=?2")
+	List<ReaderSubscribe> findBookToRead(String readeremail, ReaderBook readerbook, int rbookid);
+}

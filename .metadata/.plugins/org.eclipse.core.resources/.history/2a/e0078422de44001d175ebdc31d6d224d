@@ -1,0 +1,77 @@
+package com.digitalbook.reader.services;
+
+import java.awt.print.Book;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.digitalbook.reader.client.BookRecordsClient;
+import com.digitalbook.reader.entities.ReaderBook;
+import com.digitalbook.reader.entities.ReaderSubscribe;
+import com.digitalbook.reader.exception.ReaderException;
+import com.digitalbook.reader.repositories.ReaderBookRepository;
+import com.digitalbook.reader.repositories.ReaderRepository;
+
+@Service
+public class ReaderService {
+
+	@Autowired
+	private ReaderRepository rrepo;
+
+	@Autowired
+	private ReaderBookRepository rbookrepo;
+	
+	@Autowired
+	private BookRecordsClient bookRecordsClient;
+	
+	public ReaderBook saveReaderBook(ReaderBook rbk) {		
+		return rrepo.save(rbk);
+	}
+
+	public List<ReaderBook> fetchAllBooks() {
+		
+		return rrepo.findAll();
+	}
+
+	public List<ReaderBook> findAllPurchaseBook(String readeremail) throws ReaderException{
+		
+		try {
+		List<ReaderBook> bookList = new ArrayList<>();
+		List<ReaderSubscribe>readerBookList = rbookrepo.findByReaderEmailId(readeremail);
+		for(ReaderSubscribe rds :readerBookList) 
+		{
+			int bookid = rds.getBookid();
+			ReaderSubscribe book = 	bookRecordsClient.getBooks(bookid);
+		}
+		return bookList;
+	}catch (Exception e) {
+		throw new ReaderException("Unable to get Subscribed book using Email Id " + readeremail
+				+ ". Method getAllSubcribedBooksByEmailId Failed.");
+	}
+	}
+
+	public ReaderSubscribe getBookToRead(String readeremail, int rbookid) throws ReaderException{
+		try {
+			if (!(rbookrepo.getValidBookToRead(readeremail, rbookid) == null)) {
+				return bookRecordsClient.getBooks(rbookid);
+
+			} else {
+				throw new ReaderException("Invalid Email Id or book Id ");
+			}
+		} catch (ReaderException re) {
+			throw new ReaderException("Book with Book Id " + rbookid + " and User " + readeremail
+					+ " not found to Read. getBookToRead() failed");
+		}
+		
+	}
+
+	
+	public ReaderSubscribe getBookBySubscriptionId(int pid, String readeremail) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	
+}

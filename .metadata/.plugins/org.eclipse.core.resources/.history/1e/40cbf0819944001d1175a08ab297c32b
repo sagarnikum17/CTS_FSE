@@ -1,0 +1,56 @@
+package com.digitalbook.reader.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.digitalbook.reader.entities.ReaderBook;
+import com.digitalbook.reader.entities.ReaderSubscribe;
+import com.digitalbook.reader.exception.ReaderException;
+import com.digitalbook.reader.services.ReaderService;
+import com.digitalbook.reader.services.ReaderSubService;
+
+@RestController
+@RequestMapping("/api/v1/digitalbooks/readers")
+public class ReaderController {
+
+	@Autowired
+	private ReaderService rservice;
+
+	@Autowired
+	private ReaderSubService rsubservice;
+
+	@PostMapping()
+	public ReaderBook createBook(@RequestBody ReaderBook rbk) {
+		return rservice.saveReaderBook(rbk);
+	}
+
+	@GetMapping()
+	public List<ReaderBook> getAllBooks() {
+		return rservice.fetchAllBooks();
+	}
+
+	
+	// 3 get purchased books
+
+	@GetMapping("/{readeremail}/books")
+	public List<ReaderBook> getPurchasedBooks(@PathVariable String readeremail) throws ReaderException {
+		return rservice.findAllPurchaseBook(readeremail);
+
+	}
+	
+	//4 reader read purchased book
+	
+	@GetMapping("/{readeremail}/books/{rbookid}")
+	public  readPurchasedBook(@PathVariable String readeremail, @RequestBody ReaderBook readerbook, @PathVariable  int rbookid )
+	{
+		return rsubservice.findBookToRead(readeremail, readerbook, rbookid);
+	}
+}

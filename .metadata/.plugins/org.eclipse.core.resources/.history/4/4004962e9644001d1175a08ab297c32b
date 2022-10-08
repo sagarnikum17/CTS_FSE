@@ -1,0 +1,56 @@
+package com.digitalbook.reader.services;
+
+import java.awt.print.Book;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.digitalbook.reader.client.BookRecordsClient;
+import com.digitalbook.reader.entities.ReaderBook;
+import com.digitalbook.reader.entities.ReaderSubscribe;
+import com.digitalbook.reader.exception.ReaderException;
+import com.digitalbook.reader.repositories.ReaderBookRepository;
+import com.digitalbook.reader.repositories.ReaderRepository;
+
+@Service
+public class ReaderService {
+
+	@Autowired
+	private ReaderRepository rrepo;
+
+	@Autowired
+	private ReaderBookRepository rbookrepo;
+	
+	@Autowired
+	private BookRecordsClient bookRecordsClient;
+	
+	public ReaderBook saveReaderBook(ReaderBook rbk) {		
+		return rrepo.save(rbk);
+	}
+
+	public List<ReaderBook> fetchAllBooks() {
+		
+		return rrepo.findAll();
+	}
+
+	public List<ReaderBook> findAllPurchaseBook(String readeremail) throws ReaderException{
+		
+		try {
+		List<ReaderBook> bookList = new ArrayList<>();
+		List<ReaderSubscribe>readerBookList = rbookrepo.findByReaderEmailId(readeremail);
+		for(ReaderSubscribe rds :readerBookList) 
+		{
+			int bookid = rds.getBookid();
+			ReaderBook book = 	bookRecordsClient.getBooks(bookid);
+		}
+		return bookList;
+	}catch (Exception e) {
+		throw new ReaderException("Unable to get Subscribed bOOk using Email Id " + readeremail
+				+ ". Method getAllSubcribedBooksByEmailId Failed.");
+	}
+	}
+	
+	
+}

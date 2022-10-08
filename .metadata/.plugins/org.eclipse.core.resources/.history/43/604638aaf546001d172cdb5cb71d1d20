@@ -1,0 +1,130 @@
+package com.digitalbook.reader.services;
+
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.digitalbook.reader.client.BookRecordsClient;
+import com.digitalbook.reader.entities.ReaderBook;
+import com.digitalbook.reader.entities.ReaderSubscribe;
+import com.digitalbook.reader.exception.ReaderException;
+import com.digitalbook.reader.repositories.ReaderBookRepository;
+
+@Service
+public class ReaderService {
+
+	
+
+	@Autowired
+	private ReaderBookRepository rbookrepo;
+	
+	@Autowired
+	private BookRecordsClient bookRecordsClient;
+	
+	
+	public ReaderSubscribe subscribeBook(ReaderSubscribe readersubscribe) throws ReaderException{
+		try {
+			return rbookrepo.save(readersubscribe);
+		} catch (Exception e) {
+			throw new ReaderException("Unable to subscribe Book. subscribeBook method failed");
+		}
+	}
+	
+
+	public List<ReaderBook> findAllPurchaseBook(String readeremail) throws ReaderException{
+		
+		try {
+		List<ReaderBook> bookList = new ArrayList<>();
+		List<ReaderSubscribe>readerBookList = rbookrepo.findByReaderEmailId(readeremail);
+		System.out.println("ReaderBookList:=" +readerBookList);
+		for(ReaderSubscribe rds :readerBookList) 
+		{
+			int bookid = rds.getBookid();
+			ReaderBook book = 	bookRecordsClient.getBooks(bookid);
+			bookList.add(book);
+		}
+		return bookList;
+	}catch (Exception e) {
+		throw new ReaderException("Unable to get Subscribed book using Email Id " + readeremail
+				+ ". Method findByReaderEmailId Failed.");
+	}
+	}
+
+	public ReaderBook getBookToRead(String readeremail, int bookid) throws ReaderException{
+		try {
+			if (!(rbookrepo.getValidBookToRead(readeremail, bookid) == null)) {
+				return bookRecordsClient.getBooks(bookid);
+
+			} else {
+				throw new ReaderException("Invalid Email Id or book Id ");
+			}
+		} catch (ReaderException re) {
+			throw new ReaderException("Book with Book Id " + bookid + " and User " + readeremail
+					+ " not found to Read. getBookToRead() failed");
+		}
+		
+	}
+
+	// get purchased books by payment id
+	public ReaderBook getBookBySubscriptionId( String readeremail, int pid ) throws ReaderException {
+		
+		try {
+		
+		ReaderSubscribe readersubbook = rbookrepo.findBookBySubscriptionId(readeremail, pid);
+		if (!(readersubbook == null)) {
+
+			return bookRecordsClient.getBooks(readersubbook.getBookid());
+		} else {
+			throw new ReaderException(
+					"Invalid Email Id or Subscription ID. ReaderService getBook using pid Failed");
+		}
+
+	}
+		catch (ReaderException re) {
+			throw new ReaderException("Book with Subscription Id " + pid + " and User " + readeremail
+					+ " not found. getBookBySubscriptionId() failed");
+			
+		}
+	}
+
+	
+	//getRefund
+	public boolean getRefundAvailability(String readeremail, int bookid) throws ReaderException{
+		
+		try {
+			ReaderSubscribe readersubbook = rbookrepo.getValidBookToRead(readeremail, bookid);
+			if (readersubbook == null) {
+				return false;
+			} else {
+				LocalDate subscribeDate = readersubbook.getSubscribedate();
+				if (subscribeDate == null) {
+					return false;
+				}
+
+				LocalDate toDateTime = LocalDate.now();
+				long days = subscribeDate.until(toDateTime, ChronoUnit.DAYS);
+				subscribeDate = subscribeDate.plusDays(days);
+
+				if (days > 0) {
+					return false;
+				} else {
+					return true;
+				}
+			}
+
+		} catch (Exception e) {
+			throw new ReaderException("Refund Operation failed for bookId " + bookid + " eamilId = " + readeremail
+					+ ". getRefundAvailability method failed.");
+		}
+		
+		
+	}
+
+	
+	
+	
+}

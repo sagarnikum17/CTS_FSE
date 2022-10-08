@@ -1,0 +1,109 @@
+package com.digitalbook.entities;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+
+public class Book {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int b_id;
+	private int a_id;
+	private String b_name;
+	private String b_category;
+	
+	private String b_auther;
+	private double b_price;
+	private String b_publisher;
+	private String b_publishdate;
+	
+	
+	
+	public int getA_id() {
+		return a_id;
+	}
+
+	public void setA_id(int a_id) {
+		this.a_id = a_id;
+	}
+
+	public String getB_publishdate() {
+		return b_publishdate;
+	}
+
+	public void setB_publishdate(String b_publishdate) {
+		this.b_publishdate = b_publishdate;
+	}
+
+	public int getB_id() {
+		return b_id;
+	}
+	
+	public void setB_id(int b_id) {
+		this.b_id = b_id;
+	}
+	public String getB_category() {
+		return b_category;
+	}
+	public void setB_category(String b_category) {
+		this.b_category = b_category;
+	}
+	public String getB_auther() {
+		return b_auther;
+	}
+	public void setB_auther(String b_auther) {
+		this.b_auther = b_auther;
+	}
+	public double getB_price() {
+		return b_price;
+	}
+	public void setB_price(double b_price) {
+		this.b_price = b_price;
+	}
+	public String getB_publisher() {
+		return b_publisher;
+	}
+	public void setB_publisher(String b_publisher) {
+		this.b_publisher = b_publisher;
+	}
+	
+	public String getB_name() {
+		return b_name;
+	}
+
+	public void setB_name(String b_name) {
+		this.b_name = b_name;
+	}
+
+	public Book(int a_id, String b_name, String b_category, String b_auther, double b_price, String b_publisher) {
+		super();
+		this.a_id = a_id;
+		this.b_name = b_name;
+		this.b_category = b_category;
+		this.b_auther = b_auther;
+		this.b_price = b_price;
+		this.b_publisher = b_publisher;
+	}
+	
+	public Book(int b_id, int a_id, String b_name, String b_category, String b_auther, double b_price, String b_publisher )
+	{
+		this(a_id,b_name,b_category,b_auther,b_price,b_publisher);		
+		this.b_id=b_id;
+	}
+	
+	@Override
+	public String toString() {
+		return "Book [b_id=" + b_id + ", b_name=" + b_name + ", b_category=" + b_category + ", b_auther=" + b_auther
+				+ ", b_price=" + b_price + ", b_publisher=" + b_publisher + "]";
+	}
+
+	public Book() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+}

@@ -1,0 +1,12 @@
+package com.digitalbook.reader.client;
+
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.digitalbook.reader.entities.ReaderBook;
+
+@FeignClient("BOOK-RECORDS")
+public interface BookRecordsClient {
+
+	ReaderBook getBooks(@RequestParam(name = "id") int id);
+}

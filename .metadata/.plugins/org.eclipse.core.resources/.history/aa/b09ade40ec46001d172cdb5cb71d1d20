@@ -1,0 +1,84 @@
+package com.digitalbook.services;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.digitalbook.entities.Book;
+import com.digitalbook.exception.BookException;
+import com.digitalbook.repositories.BookRepository;
+
+@Service
+public class BookService {
+
+	@Autowired
+	private BookRepository brepo;
+
+	public Book saveBook(Book bk) {
+		return brepo.save(bk);
+	}
+
+	public List<Book> fetchAllBooks() {
+		return brepo.findAll();
+	}
+
+	public List<Book> findBooksByName(String b_name) throws BookException{
+
+		List<Book> booklist = brepo.findByName(b_name);
+		if(booklist.isEmpty())
+		{
+			throw new BookException("Book with name (" + b_name + ") not found");
+		}else {
+			
+			return booklist;
+		}
+		
+	}
+
+	public List<Book> findBooksByCategory(String b_category) throws BookException{
+
+		List<Book> booklist1 = brepo.findByCategory(b_category);
+		if(booklist1.isEmpty())
+		{
+			throw new BookException("Book with category (" + b_category + ") not found");
+		}else {
+			
+			return booklist1;
+		}
+	}
+	
+	public Book filterByPrice(double b_price) throws BookException{
+		// TODO Auto-generated method stub
+		Optional<Book> optional = brepo.filterByName(b_price);
+		
+		if (optional.isEmpty()) {
+			throw new BookException("Book with price(" + b_price + ") not found");
+		} else {
+			return optional.get();
+		}
+
+	}
+
+	public List<Book> searchby_Name_Category_auther_price_publisher(String b_name, String b_category, String b_auther,
+			double b_price, String b_publisher)throws BookException 
+	{
+		List<Book> booklist2 = brepo.findByNameAndCategoryAndAutherAndPriceAndPublisher(b_name, b_category, b_auther, b_price,
+				b_publisher);
+		if(booklist2.isEmpty())
+		{
+			throw new BookException("Book with Name,Category,Auther,Price,Publisher("+b_name+""
+																					 +b_category+""
+																					 +b_auther+""
+																					 +b_price+""
+																					 +b_publisher+") not found");
+		}else {
+		
+			return booklist2;
+		}
+	}
+
+	
+
+}

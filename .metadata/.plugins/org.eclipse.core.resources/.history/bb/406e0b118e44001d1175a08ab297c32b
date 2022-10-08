@@ -1,0 +1,82 @@
+package com.digitalbook.reader.entities;
+
+import java.time.LocalDate;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "subscribebook")
+public class ReaderSubscribe {
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int subid;
+	
+	private int bookid;
+	private String readername;
+	private String readeremail;
+	private LocalDate subscribedate;
+	
+	public LocalDate getSubscribedate() {
+		return subscribedate;
+	}
+	public void setSubscribedate(LocalDate subscribedate) {
+		this.subscribedate = subscribedate;
+	}
+	public int getSubid() {
+		return subid;
+	}
+	public void setSubid(int subid) {
+		this.subid = subid;
+	}
+	public int getBookid() {
+		return bookid;
+	}
+	public void setBookid(int bookid) {
+		this.bookid = bookid;
+	}
+	public String getReadername() {
+		return readername;
+	}
+	public void setReadername(String readername) {
+		this.readername = readername;
+	}
+	public String getReaderemail() {
+		return readeremail;
+	}
+	public void setReaderemail(String readeremail) {
+		this.readeremail = readeremail;
+	}
+	
+	
+	public SubscribeBook(int bookid, String readername, String readeremail, LocalDate subscribedate) {
+		super();
+		this.bookid = bookid;
+		this.readername = readername;
+		this.readeremail = readeremail;
+		this.subscribedate = subscribedate;
+	}
+	
+	public SubscribeBook()
+	{
+		
+	}
+	
+	@Override
+	public String toString() {
+		return "SubscribeBook [subid=" + subid + ", bookid=" + bookid + ", readername=" + readername
+				+ ", readeremail=" + readeremail + ", subscribedate=" + subscribedate + "]";
+	}
+	
+	
+}
+ 
+	
+	
+	
+	
+}

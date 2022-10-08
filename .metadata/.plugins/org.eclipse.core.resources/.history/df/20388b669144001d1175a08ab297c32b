@@ -1,0 +1,31 @@
+package com.digitalbook.reader.services;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.digitalbook.reader.entities.ReaderBook;
+import com.digitalbook.reader.entities.ReaderSubscribe;
+import com.digitalbook.reader.repositories.ReaderSubRepository;
+
+@Service
+public class ReaderSubService {
+
+	@Autowired
+	private ReaderSubRepository rsubrepo;
+
+	public ReaderSubscribe saveSubscribeReaderBook(ReaderSubscribe rsbk) {
+		return rsubrepo.save(rsbk);
+	}
+
+	public List<ReaderSubscribe> findAllPurchaseBook(String readeremail ) {
+		return rsubrepo.findAllPurchaseBook(readeremail );
+	}
+
+	public List<ReaderSubscribe> findBookToRead(String readeremail, ReaderBook readerbook, int rbookid )
+	{
+		return rsubrepo.findBookToRead(readeremail, readerbook, rbookid);
+		
+	}
+}

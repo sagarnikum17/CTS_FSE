@@ -1,0 +1,98 @@
+package com.digitalbook.author.service;
+
+import java.util.Date;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import com.digitalbook.author.entities.Author;
+import com.digitalbook.author.entities.AuthorBook;
+import com.digitalbook.author.exception.AuthorException;
+import com.digitalbook.author.repositories.AuthorBookRepository;
+import com.digitalbook.author.repositories.AuthorRepository;
+
+@Service
+public class AuthorService {
+
+	@Autowired
+	private AuthorRepository arepo;
+	
+	@Autowired
+	private AuthorBookRepository abookrepo;
+	
+	public Author authorSignUp(Author author) throws Exception{
+		
+		try {
+			PasswordEncoder encoder = new BCryptPasswordEncoder();
+			String encodedStr = encoder.encode(author.getPassword());
+			author.setPassword(encodedStr);
+			return arepo.save(author);			
+		} catch (Exception e) {
+			throw new AuthorException("Sign Up operation terminated. authorSignUp Method Failed.");
+		}
+	}
+	
+	
+//	public AuthorBook createBook(AuthorBook authorbook, int a_id) throws AuthorException{
+//		try {
+//			authorbook.setA_id(a_id);
+//			
+//			AuthorBook authorbook1= new AuthorBook();
+//			authorbook1.setA_bookid(authorbook.getA_bookid());
+//			authorbook1.setA_id(authorbook.getA_id());
+//			authorbook1.setA_name(authorbook.getA_name());
+//			authorbook1.setA_category(authorbook.getA_category());
+//			authorbook1.setA_author(authorbook.getA_author());
+//			authorbook1.setA_price(authorbook.getA_price());
+//			authorbook1.setA_publisher(authorbook.getA_publisher());
+//			authorbook1.setA_publishdate(authorbook.getA_publishdate());
+//			
+//			
+//			return abookrepo.save(authorbook);
+//		} catch (Exception e) {
+//			throw new AuthorException("Unable to Create Book. Creation failed. createBook method terminated.");
+//		}
+//	}
+	
+	
+	public AuthorBook blockUnblockBook(int authorId, int bookId,AuthorBook authorBook) throws AuthorException{
+		try {
+			AuthorBook updatedBook = abookrepo.findByBookIdAndAuthorId(bookId);
+			if(updatedBook !=null){
+				updatedBook.setA_id(authorBook.getA_id());
+				updatedBook.setA_name(authorBook.getA_name());
+				updatedBook.setA_category(authorBook.getA_category());
+				updatedBook.setA_author(authorBook.getA_author());
+				updatedBook.setA_price(authorBook.getA_price());
+				updatedBook.setA_publisher(authorBook.getA_publisher());
+				updatedBook.setA_publishdate(authorBook.getA_publishdate());
+				updatedBook.setA_isblock(authorBook.isA_isblock());
+				
+			}
+			return abookrepo.save(updatedBook);
+		} catch (Exception e) {
+			throw new AuthorException("Update Operation Failed. blockUnblockBook method failed");
+		}
+	}
+
+
+	public Author findById(int aid) throws Exception{
+		
+		Optional<Author> optional = arepo.findById(aid);
+		if (optional.isEmpty()) {
+			throw new Exception("Author with id(" + aid + ") not found");
+		} else {
+			return optional.get();
+		}
+	}
+
+
+	public AuthorBook saveBook(AuthorBook authorbook) {
+		
+		return abookrepo.save(authorbook);
+	}
+	
+}

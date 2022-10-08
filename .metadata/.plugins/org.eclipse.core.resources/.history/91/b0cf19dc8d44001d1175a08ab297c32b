@@ -1,0 +1,26 @@
+package com.digitalbook.reader.entities;
+
+import java.time.LocalDate;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "subscribebook")
+public class ReaderSubscribe {
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int subid;
+	
+	private int bookid;
+	private String readername;
+	private String readeremail;
+	private LocalDate subscribedate;
+	
+	
+	
+}
