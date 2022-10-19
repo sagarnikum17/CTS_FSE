@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,12 +23,6 @@ public class ReaderController {
 	private ReaderService rservice;
 
 	
-	@PostMapping("/subscribe")
-	public ReaderSubscribe SubscribeBook(@RequestBody ReaderSubscribe readersubscribe) throws ReaderException{
-
-		return rservice.subscribeBook(readersubscribe);
-	}
-	
 	
 	// 3 get purchased books
 
@@ -42,7 +35,7 @@ public class ReaderController {
 	//4 reader read purchased book
 	
 	@GetMapping("/{readeremail}/books/{bookid}")
-	public  ReaderBook getBookToRead(@PathVariable String readeremail,  @PathVariable  int bookid ) throws Exception
+	public  ReaderSubscribe getBookToRead(@PathVariable String readeremail,  @PathVariable  int bookid ) throws Exception
 	{
 		return rservice.getBookToRead(readeremail,  bookid);
 	}
@@ -50,7 +43,7 @@ public class ReaderController {
 	// 5 reader can find purchased book by paymentid
 	
 	@PostMapping("/{readeremail}/books")  //5
-	public ReaderBook getBooksBySubscriptioId(@PathVariable String readeremail, @RequestParam int pid) throws Exception{
+	public ReaderSubscribe getBooksBySubscriptioId(@PathVariable String readeremail, @RequestParam int pid) throws Exception{
 		return rservice.getBookBySubscriptionId(readeremail, pid);
 	}
 	

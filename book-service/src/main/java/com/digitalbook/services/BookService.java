@@ -36,21 +36,9 @@ public class BookService {
 		}
 		
 	}
-	
-	public Optional<Book> findBooksById(int b_id) throws BookException{
-		
-		Optional<Book> book = brepo.findById(b_id);
-		if(book.isEmpty())
-		{
-			throw new BookException("Book with name (" + b_id + ") not found");
-		}else {
-			
-			return book;
-		}
-	}
 
 	public List<Book> findBooksByCategory(String b_category) throws BookException{
-
+		
 		List<Book> booklist1 = brepo.findByCategory(b_category);
 		if(booklist1.isEmpty())
 		{
@@ -61,14 +49,14 @@ public class BookService {
 		}
 	}
 	
-	public Book filterByPrice(double b_price) throws BookException{
+	public List<Book> filterByPrice(double b_price) throws BookException{
 		// TODO Auto-generated method stub
-		Optional<Book> optional = brepo.filterByName(b_price);
+		List<Book> bkl = brepo.filterByPrice(b_price);
 		
-		if (optional.isEmpty()) {
+		if (bkl.isEmpty()) {
 			throw new BookException("Book with price(" + b_price + ") not found");
 		} else {
-			return optional.get();
+			return bkl;
 		}
 
 	}
@@ -91,7 +79,15 @@ public class BookService {
 		}
 	}
 
-	
+	public Book findById(int b_id) throws BookException{
+		
+		Optional<Book> optional = brepo.findById(b_id);
+		if (optional.isEmpty()) {
+			throw new BookException("Book with id(" + b_id + ") not found");
+		} else {
+			return optional.get();
+		}
+	}
 
 	
 

@@ -13,6 +13,7 @@ public class Book {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int b_id;
+	
 	private int a_id;
 	private String b_name;
 	private String b_category;

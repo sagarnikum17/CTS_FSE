@@ -1,9 +1,9 @@
 package com.digitalbook.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +20,7 @@ import com.digitalbook.services.SubscribeBookService;
 
 @RestController
 @RequestMapping("/api/v1/digitalbooks/books")
-//@CrossOrigin(origins = { "https://hoppscotch.io"})
+//@CrossOrigin(origins = { "https://hoppscotch.io", "http://localhost:4200/"})
 public class BookController {
 
 	@Autowired
@@ -39,15 +39,14 @@ public class BookController {
 		return bservice.saveBook(bk);
 	}
 
-	//find byId
-	@GetMapping("/getbook")
-	public Optional<Book> fetchById(@RequestParam int b_id) throws BookException{
-		return bservice.findBooksById(b_id);
+	// findByBookId
+	@GetMapping("/find/b_id")
+	public Book getBook(@RequestParam int b_id) throws BookException {
+		return bservice.findById(b_id);
 	}
-	
 	// findByName
-	@GetMapping("/find/{b_name}")
-	public List<Book> fetchByName(@PathVariable String b_name) throws BookException{
+	@GetMapping("/find/b_name")
+	public List<Book> fetchByName(@RequestParam String b_name) throws BookException{
 		return bservice.findBooksByName(b_name);
 	}
 
@@ -58,8 +57,8 @@ public class BookController {
 	}
 	
 	// filterByPrice
-	@GetMapping("/filter") // localhost:8080/api/movies/filter?rating=3.4
-	public Book filter(@RequestParam double b_price) throws BookException{
+	@GetMapping("/filter/b_price") 
+	public  List<Book>  filter(@RequestParam double b_price) throws BookException{
 		return bservice.filterByPrice(b_price);
 	}
 

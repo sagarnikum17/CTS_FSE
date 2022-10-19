@@ -61,11 +61,6 @@ public class ReaderSubscribe {
 		this.subscribedate = subscribedate;
 	}
 	
-	public ReaderSubscribe(int subid,int bookid, String readername, String readeremail, LocalDate subscribedate)
-	{
-		this(bookid,readername,readeremail,subscribedate);
-		this.subid = subid;
-	}
 	public ReaderSubscribe()
 	{
 		

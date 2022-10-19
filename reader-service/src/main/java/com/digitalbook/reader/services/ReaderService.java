@@ -26,27 +26,16 @@ public class ReaderService {
 	private BookRecordsClient bookRecordsClient;
 	
 	
-	public ReaderSubscribe subscribeBook(ReaderSubscribe readersubscribe) throws ReaderException{
-		try {
-			return rbookrepo.save(readersubscribe);
-		} catch (Exception e) {
-			throw new ReaderException("Unable to subscribe Book. subscribeBook method failed");
-		}
-	}
-	
 
 	public List<ReaderBook> findAllPurchaseBook(String readeremail) throws ReaderException{
 		
 		try {
 		List<ReaderBook> bookList = new ArrayList<>();
 		List<ReaderSubscribe>readerBookList = rbookrepo.findByReaderEmailId(readeremail);
-		System.out.println("ReaderBookList:=" +readerBookList);
-		
 		for(ReaderSubscribe rds :readerBookList) 
 		{
 			int bookid = rds.getBookid();
-			ReaderBook book = 	bookRecordsClient.getBooks(bookid);
-			bookList.add(book);
+			ReaderSubscribe book = 	bookRecordsClient.getBooks(bookid);
 		}
 		return bookList;
 	}catch (Exception e) {
@@ -55,7 +44,7 @@ public class ReaderService {
 	}
 	}
 
-	public ReaderBook getBookToRead(String readeremail, int bookid) throws ReaderException{
+	public ReaderSubscribe getBookToRead(String readeremail, int bookid) throws ReaderException{
 		try {
 			if (!(rbookrepo.getValidBookToRead(readeremail, bookid) == null)) {
 				return bookRecordsClient.getBooks(bookid);
@@ -71,7 +60,7 @@ public class ReaderService {
 	}
 
 	// get purchased books by payment id
-	public ReaderBook getBookBySubscriptionId( String readeremail, int pid ) throws ReaderException {
+	public ReaderSubscribe getBookBySubscriptionId( String readeremail, int pid ) throws ReaderException {
 		
 		try {
 		
@@ -124,8 +113,6 @@ public class ReaderService {
 		
 		
 	}
-
-	
 	
 	
 }
