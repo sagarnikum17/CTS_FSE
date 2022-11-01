@@ -13,7 +13,7 @@ import com.digitalbook.exception.BookException;
 public class ExceptionAdvice {
 
 	@ExceptionHandler(BookException.class)
-	public ResponseEntity<?> handleMovieException(BookException bo) {
+	public ResponseEntity<?> handleBookException(BookException bo) {
 			
 
 		return new ResponseEntity<String>("BookException: "+bo.getMessage(), HttpStatus.OK);

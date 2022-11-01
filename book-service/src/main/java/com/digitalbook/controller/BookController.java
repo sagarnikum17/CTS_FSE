@@ -20,7 +20,7 @@ import com.digitalbook.services.SubscribeBookService;
 
 @RestController
 @RequestMapping("/api/v1/digitalbooks/books")
-//@CrossOrigin(origins = { "https://hoppscotch.io", "http://localhost:4200/"})
+@CrossOrigin(origins = {"http://localhost:4200/"})
 public class BookController {
 
 	@Autowired
@@ -42,7 +42,7 @@ public class BookController {
 	// findByBookId
 	@GetMapping("/find/b_id")
 	public Book getBook(@RequestParam int b_id) throws BookException {
-		return bservice.findById(b_id);
+		return bservice.findById(b_id); 
 	}
 	// findByName
 	@GetMapping("/find/b_name")
