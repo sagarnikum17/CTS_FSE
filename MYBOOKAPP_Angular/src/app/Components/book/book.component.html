@@ -1,0 +1,27 @@
+<br>
+<br>
+<br>
+<h1>SearchBooks</h1>
+       <div>
+        <!-- <form class="bookForm"  (ngSubmit)="onSubmit(bookCreation.value)" -->
+            <form [formGroup]= "bookForm"     style="margin: 10ch;width: 220px;">
+            
+                BookName:<input formControlName="b_name" type="text" placeholder="Enter BookName" /><br/>
+                Category:<input formControlName="b_category" type="text" placeholder="Enter BookCategory" /><br/>
+                Author:<input formControlName="b_auther" type="text" placeholder="Enter BookAuthor" /><br/>
+                Price:<input formControlName="b_price" type="text" placeholder="Enter BookPrice" /><br/>
+                Publisher:<input formControlName="b_publisher" type="text" placeholder="Enter BookPublisher" /><br/>
+                <button type="submit" value="get" (click)="fetchBooks()" class="searchallbooks">SearchBooks</button>  
+                
+        </form>  
+    </div>
+    <div>  
+        <form [formGroup]= "bookForm" style="margin: 5ch;width: 10px;">
+            BookName:<input formControlName="b_name" type="text" placeholder="Enter BookName" /><br/>
+            <button type="submit" value="get" (onclick)="fetchByName()" class="getBookByName">FindByName</button>
+        </form>
+    </div>
+    
+       
+   
+

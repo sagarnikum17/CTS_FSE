@@ -1,0 +1,14 @@
+.searchallbooks
+{
+    background-color: #262726;
+  color: white;
+  padding: 10px 20px;
+  margin: 50px 0;
+  border: none;
+  cursor: pointer;
+  width: 50%;
+  opacity: 0.6;
+}
+        p {
+            text-align: center;
+        }
